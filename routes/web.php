@@ -12,7 +12,8 @@
     use App\Http\Controllers\BroadcastController;
     use App\Http\Controllers\ShiftDefinitionController;
     use App\Http\Controllers\AdminChatController;
-    use App\Http\Controllers\ChatController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\ChatController;
     use App\Http\Controllers\TaskController;
     use App\Models\PrivacyPolicy;
     use App\Http\Controllers\Auth\CustomPasswordController;
@@ -92,6 +93,9 @@
     Route::get('/login', [PageController::class, 'login'])->name('login');
     Route::post('/login/check', [PageController::class, 'loginCheck'])->name('login.check');
     Route::post('/logout', [PageController::class, 'logout'])->name('logout');
+    
+   
+
     
     Route::middleware('isLoggedIn')->group(function () {
         Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard');
