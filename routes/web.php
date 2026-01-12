@@ -1,6 +1,7 @@
 <?php
 
-    use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\CqcVaultController;
+use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\PageController;
     use App\Http\Controllers\ScheduleController;
     use App\Http\Controllers\TaskScheduleController;
@@ -39,7 +40,7 @@ use App\Http\Controllers\ChatController;
     });
     
     
-     Route::prefix('admin/chat')->middleware(['isLoggedIn'])->group(function () {
+Route::prefix('admin/chat')->middleware(['isLoggedIn'])->group(function () {
             Route::get('/', [AdminChatController::class, 'getConversations'])->name('admin.chat');
             Route::get('/users', [AdminChatController::class, 'getUsersList'])->name('admin.chat.users');
             Route::get('/messages', [AdminChatController::class, 'fetchMessages'])->name('admin.chat.messages');
@@ -150,3 +151,34 @@ use App\Http\Controllers\ChatController;
     });
 
 
+
+Route::get('cqc-index/', [CqcVaultController::class,'index']);
+Route::get('cqc-vault', [CqcVaultController::class,'index']);
+
+Route::get('admin/dashboard', [CqcVaultController::class,'dashboard']);
+Route::get('admin/checklist-frequency', [CqcVaultController::class,'checklistfrequency']);
+Route::get('admin/checklist-cqc', [CqcVaultController::class,'checklist']);
+
+// Audit logs
+Route::get('cqc-vault/audit-logs', [CqcVaultController::class,'auditLogs']);
+
+// Folder creation
+Route::get('cqc-vault/folder/create', [CqcVaultController::class,'createFolderPage']);
+Route::post('cqc-vault/folder/create', [CqcVaultController::class,'createFolder']);
+
+// Folder view (show documents & subfolders)
+Route::get('cqc-vault/folder/{id}', [CqcVaultController::class,'viewFolder']);
+
+// Upload document
+Route::post('cqc-vault/upload', [CqcVaultController::class,'upload']);
+
+// Document history
+Route::get('cqc-vault/history/{id}', [CqcVaultController::class,'history']);
+
+// Add multiple subfolders
+Route::post('cqc-vault/folder/{id}/subfolders', [CqcVaultController::class,'addSubfolders']);
+
+// Delete a folder
+Route::delete('cqc-vault/folder/{id}', [CqcVaultController::class,'dFolder']);
+Route::delete('cqc-vault/folder/{id}', [CqcVaultController::class,'deleteFolder']);
+Route::delete('cqc-vault/document/{id}', [CqcVaultController::class, 'deleteDocument']);

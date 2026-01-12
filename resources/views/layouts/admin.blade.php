@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}"> <!-- CSRF Token for AJAX -->
-    <title>Marian House Admin Panel</title>
+    <title>CQC360 Admin Panel</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- FontAwesome for icons -->
@@ -481,7 +481,7 @@
       <!-- Full-Width Header -->
     <div class="header">
         <img src="{{ asset('marianhouseicon.png') }}" alt="Logo" class="header-logo">
-        Marian House Admin Panel
+       CQC360 Admin Panel &nbsp;
         <!-- Notification Bell in header -->
         <li class="nav-item dropdown" id="admin-notification-dropdown">
             <a class="nav-link position-relative" href="#" id="adminNotificationToggle" data-bs-toggle="dropdown" aria-expanded="false">

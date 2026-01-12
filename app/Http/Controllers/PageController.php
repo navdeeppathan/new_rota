@@ -13,9 +13,13 @@ class PageController extends Controller
 {
    public function login()
     {
-        if (session()->has('user')) {
-            return redirect()->route('dashboard');
-        }
+        // if (session()->has('user')) {
+        //     return redirect()->route('dashboard');
+        // }
+
+         if (session()->has('login_success')) {
+                return view('admin.auth.login');
+            }
     
         return view('admin.auth.login');
     }
@@ -66,8 +70,8 @@ class PageController extends Controller
     
     
             // Return success response
-            return redirect()->route('dashboard')->with('success', 'Login successful!');
-
+            // return redirect()->route('dashboard')->with('success', 'Login successful!');
+            return redirect()->route('login')->with('login_success', true);
     
             
         } catch (\Exception $e) {
