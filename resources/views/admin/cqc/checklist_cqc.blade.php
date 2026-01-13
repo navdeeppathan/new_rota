@@ -3,7 +3,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --primary: #004a99; --secondary: #00a8e8; --success: #2e7d32; --bg: #f8fafc; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; color: #333; }
         .container { max-width: 1100px; margin: auto; display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
 
         .sidebarr { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); height: fit-content; position: sticky; top: 20px; }

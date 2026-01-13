@@ -397,38 +397,50 @@ body{
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 @if(session('login_success'))
-<script>
-  Swal.fire({
-      title: 'Login Successful!',
-      text: 'Where do you want to go?',
-      icon: 'success',
-      showCancelButton: true,
-      confirmButtonText: 'Go to CQC',
-      cancelButtonText: 'Go to ROTA',
-      confirmButtonColor: '#E85A72',
-      cancelButtonColor: '#49479D',
+  <script>
+    Swal.fire({
+        title: 'Login Successful!',
+        text: 'Where do you want to go?',
+        icon: 'success',
+        showCancelButton: true,
+        confirmButtonText: 'Go to CQC',
+        cancelButtonText: 'Go to ROTA',
+        confirmButtonColor: '#E85A72',
+        cancelButtonColor: '#49479D',
 
-      didOpen: () => {
-          const actions = Swal.getActions();
-          actions.style.display = 'flex';
-          actions.style.gap = '18px';
-          actions.style.justifyContent = 'center';
+        didOpen: () => {
+            const actions = Swal.getActions();
+            actions.style.display = 'flex';
+            actions.style.gap = '18px';
+            actions.style.justifyContent = 'center';
 
-          const confirmBtn = Swal.getConfirmButton();
-          const cancelBtn = Swal.getCancelButton();
+            const confirmBtn = Swal.getConfirmButton();
+            const cancelBtn = Swal.getCancelButton();
 
-          confirmBtn.style.minWidth = '120px';
-          cancelBtn.style.minWidth = '120px';
-      }
-  }).then((result) => {
-      if (result.isConfirmed) {
-          window.location.href = "/cqc-index";
-      } else {
-          window.location.href = "/dashboard";
-      }
-  });
-</script>
+            confirmBtn.style.minWidth = '120px';
+            cancelBtn.style.minWidth = '120px';
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = "/cqc-index";
+        } else {
+            window.location.href = "/dashboard";
+        }
+    });
+  </script>
+  
 @endif
+
+@if (session('login_error'))
+  <script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Login Failed',
+        text: 'Invalid email or password',
+    });
+  </script>
+@endif
+
 </body>
 </html>
 

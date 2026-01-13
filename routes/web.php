@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CqcVaultController;
+use App\Http\Controllers\Admin\TaskManagementController;
 use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\PageController;
     use App\Http\Controllers\ScheduleController;
@@ -182,3 +183,12 @@ Route::post('cqc-vault/folder/{id}/subfolders', [CqcVaultController::class,'addS
 Route::delete('cqc-vault/folder/{id}', [CqcVaultController::class,'dFolder']);
 Route::delete('cqc-vault/folder/{id}', [CqcVaultController::class,'deleteFolder']);
 Route::delete('cqc-vault/document/{id}', [CqcVaultController::class, 'deleteDocument']);
+
+
+Route::get('/tasks/create', [TaskManagementController::class, 'create'])->name('tasks.create');
+Route::get('cqc-vault/all-tasks', [TaskManagementController::class, 'index2'])->name('tasks.index2');
+
+Route::get('cqc-vault/tasks', [TaskManagementController::class, 'index'])->name('tasks.index');
+Route::post('/tasks', [TaskManagementController::class, 'store'])->name('tasks.store');
+Route::post('/tasks/update/{id}', [TaskManagementController::class, 'update'])->name('tasks.update');
+Route::get('/tasks/delete/{id}', [TaskManagementController::class, 'destroy'])->name('tasks.delete');

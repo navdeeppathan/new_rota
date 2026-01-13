@@ -77,11 +77,12 @@ class PageController extends Controller
         } catch (\Exception $e) {
             Log::error('Login error: ' . $e->getMessage());
     
-            return response()->json([
-                'success' => false,
-                'message' => 'Something went wrong. Please try again.',
-                'data'    => null,
-            ], 500);
+            // return response()->json([
+            //     'success' => false,
+            //     'message' => 'Something went wrong. Please try again.',
+            //     'data'    => null,
+            // ], 500);
+            return redirect()->back()->with('login_error', 'Something went wrong. Please try again.');
         }
     }
 

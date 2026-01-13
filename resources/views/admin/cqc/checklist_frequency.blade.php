@@ -6,7 +6,7 @@
     <title>Nexteck | CQC Compliance Checklist</title>
     <style>
         :root { --primary: #004a99; --secondary: #00a8e8; --light: #f4f7f6; --dark: #333; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--light); color: var(--dark); padding: 20px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--light); color: var(--dark);  }
         .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         h1 { color: var(--primary); text-align: center; margin-bottom: 10px; }
         p.subtitle { text-align: center; color: #666; margin-bottom: 30px; }

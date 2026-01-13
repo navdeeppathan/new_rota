@@ -51,6 +51,9 @@
     <a href="{{ url('admin/checklist-cqc') }}">
         <i class="bi bi-list-check me-2"></i> Checklist CQC
     </a>
+     <a href="{{ url('cqc-vault/tasks') }}">
+        <i class="bi bi-list me-2"></i>Tasks
+    </a>
     <a href="{{ url('cqc-vault/audit-logs') }}">
         <i class="bi bi-journal-text me-2"></i>Audit CQC E-Vault
     </a>

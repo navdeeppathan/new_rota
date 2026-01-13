@@ -18,7 +18,9 @@ class CqcVaultController extends Controller
     }
     public function dashboard()
     {
-        return view('admin.cqc.dashboard');
+        // return view('admin.cqc.dashboard');
+        return view('admin.newDashboard');
+
     }
     public function checklistfrequency()
     {
