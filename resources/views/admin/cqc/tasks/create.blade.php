@@ -45,7 +45,7 @@
 
 
                 <button class="btn btn-primary">Save Task</button>
-                <a href="{{ route('tasks.index') }}" class="btn btn-secondary">Back</a>
+                <a href="{{ route('tasks.index2') }}" class="btn btn-secondary">Back</a>
 
             </form>
         </div>

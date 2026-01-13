@@ -202,7 +202,10 @@
 
     .dot-red { width:12px;height:12px;border-radius:50%;background:#ef4444; }
     .dot-yellow { width:12px;height:12px;border-radius:50%;background:#f59e0b; }
-
+    .dot-green { width:12px;height:12px;border-radius:50%;background:#10b981; }
+    .dot-blue { width:12px;height:12px;border-radius:50%;background:#3b82f6; }
+    .dot-purple { width:12px;height:12px;border-radius:50%;background:#8b5cf6; }
+    .dot-orange { width:12px;height:12px;border-radius:50%;background:#f97316; }
     .metric-badge {
         display:inline-block;
         font-size:12px;
@@ -228,103 +231,68 @@
     .metric-grid div:last-child { border:none; }
     .metric-label { font-weight:600;color:#6b7280; }
 </style>
+
 <!-- ================= HEADER ================= -->
-<div class="d-flex justify-content-between align-items-center">
-    <div class="dashboard-header mb-4">
-        <h2>Organisation Dashboard</h2>
-        <p>The Organisation Dashboard gives you a centralised view of all audit activity, actions, and survey engagement across your entire service.</p>
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="dashboard-header mb-4">
+            <h2>Organisation Dashboard</h2>
+            <p>The Organisation Dashboard gives you a centralised view of all audit activity, actions, and survey engagement across your entire service.</p>
+        </div>
+        <a href="{{route('tasks.index2')}}" class="btn btn-primary" >
+            <i class="fa fa-download"></i>
+            <span>All Tasks</span>
+        </a>
     </div>
-    <a href="{{route('tasks.index2')}}" class="btn btn-primary" >
-        <i class="fa fa-download"></i>
-        <span>All Tasks</span>
-    </a>
-</div>
 
-<!-- ================= SITES ================= -->
-<div class="sites-bar">
-    <span>Sites</span>
-    <div class="sites-tabs">
-        <button class="active">Enterprise</button>
-        <button>Core</button>
+    <!-- ================= SITES ================= -->
+    <div class="sites-bar">
+        <span>Sites</span>
+        
     </div>
-</div>
 
-<div class="p-3 bg-white border-start border-end border-bottom">
-    <input class="sites-search" placeholder="Enter text to search...">
-</div>
 
-<div class="sites-card mb-4">
-    <table class="sites-table">
-        <thead>
-            <tr>
-                <th>Task</th>
-                <th>Section</th>
-                <th>Progress</th>
-                <th>Progress Description</th>
+
+    <div class="sites-card mb-4">
+        <table class="sites-table">
+            <thead>
+                <tr>
                 
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($tasks as $task)
-            <tr>
-                <td>{{ $task->description }}</td>
-                <td>{{ $task->section }}</td>
-                <td>{{ $task->progress }}</td>
-                <td>{{ $task->progress_desc }}</td>
-               
-            </tr>
-            @empty
-            <tr>
-                <td colspan="8" class="text-center">No tasks found</td>
-            </tr>
-            @endforelse
-        </tbody>
+                    <th>Safe</th>
+                    <th>Effective</th>
+                    <th>Well Led</th>
+                    <th>Responsive</th>
+                    <th>Caring</th>
+                    <th>Task Remaining</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    
+                <td>{{ $safe ?? '-' }}</td>
+                <td>{{ $effective ?? '-' }}</td>
+                <td>{{ $wellled ?? '-' }}</td>
+                <td>{{ $responsive ?? '-' }}</td>
+                <td>{{ $caring ?? '-' }}</td>
+                <td>{{ $remaining ?? '-' }}</td>
+            
+
+                
+                </tr>
+            
+            </tbody>
 
 
-    </table>
+        </table>
 
-   <div class="sites-footer">
+    
 
-    <div>
-        Page {{ $tasks->currentPage() }} of {{ $tasks->lastPage() }}
-        ({{ $tasks->total() }} items)
+    
+
     </div>
 
-    <div class="pager">
-        @if($tasks->onFirstPage())
-            <button disabled>Prev</button>
-        @else
-            <a href="{{ $tasks->previousPageUrl() }}">
-                <button>Prev</button>
-            </a>
-        @endif
 
-        <button>{{ $tasks->currentPage() }}</button>
-
-        @if($tasks->hasMorePages())
-            <a href="{{ $tasks->nextPageUrl() }}">
-                <button>Next</button>
-            </a>
-        @else
-            <button disabled>Next</button>
-        @endif
-    </div>
-
-    <div class="rows">
-        Rows per page:
-        <select onchange="location = this.value">
-            @foreach([5,10,25] as $size)
-                <option value="{{ request()->fullUrlWithQuery(['per_page' => $size]) }}"
-                    {{ request('per_page',5)==$size ? 'selected' : '' }}>
-                    {{ $size }}
-                </option>
-            @endforeach
-        </select>
-    </div>
-
-</div>
-
-</div>
 
 <!-- ================= ICON MENU ================= -->
 
@@ -341,112 +309,141 @@
         <span>Calendar</span>
     </div>
 
-    {{-- <div class="icon-tab">
-        <i class="bi bi-graph-up"></i>
-        <span>Chart</span>
-    </div> --}}
-
-    {{-- <div class="icon-tab">
-        <i class="bi bi-list-check"></i>
-        <span>Audits Overview</span>
-    </div> --}}
-
-    {{-- <div class="icon-tab">
-        <i class="bi bi-bar-chart"></i>
-        <span>Statistics</span>
-    </div> --}}
+   
 
     <div class="icon-tab">
         <i class="bi bi-clipboard-check"></i>
         <span>Actions</span>
     </div>
 
-    {{-- <div class="icon-tab">
-        <i class="bi bi-grid"></i>
-        <span>Categories</span>
-    </div> --}}
+    
 
 </div>
 
 
 
-{{-- <div class="score-bar mb-4">
 
-    <div class="score-filter">
-        <select>
-            <option>All</option>
-        </select>
-    </div>
 
-    <div>
-        Overall Score:
-       
-    </div>
-
-    <div class="score-options">
-        <label><input type="radio" checked> Show all results</label>
-        <label class="ms-3"><input type="radio"> Show recent survey only</label>
-    </div>
-
-</div> --}}
 
 
 
 <div class="row g-3">
 
-<!-- SAFE -->
-@forelse($tasks as $task)
     <div class="col-md-4">
-    <div class="metric-box">
-        <div class="metric-header">
-            <div class="metric-title">{{ $task->section }}</div>
-            <div class="dot-red"></div>
-        </div>
-        <span class="metric-badge bad-red">{{ $task->progress }}</span>
+        <div class="metric-box">
+            <div class="metric-header">
+                <div class="metric-title">Safe</div>
+                <div class="dot-green"></div>
+            </div>
 
-        <div class="metric-grid">
-            <div></div><div>Yes</div><div>No</div><div>NA</div>
-            <div class="metric-label">Original :</div><div>28</div><div>10</div><div>4</div>
-            <div class="metric-label">Currently :</div><div>29</div><div>9</div><div>4</div>
-        </div>
-    </div>
-</div>
-@endforeach
+            <div class="metric-grid">
+                <div></div><div>Yes</div><div>No</div><div>NA</div>
 
+                <div class="metric-label">Original :</div>
+                <div>{{ $safeOriginal['yes'] }}</div>
+                <div>{{ $safeOriginal['no'] }}</div>
+                <div>{{ $safeOriginal['na'] }}</div>
 
-<!-- EFFECTIVE -->
-{{-- <div class="col-md-4">
-    <div class="metric-box">
-        <div class="metric-header">
-            <div class="metric-title">Effective</div>
-            <div class="dot-red"></div>
-        </div>
-        <span class="metric-badge bad-red">Inadequate</span>
-
-        <div class="metric-grid">
-            <div></div><div>Yes</div><div>No</div><div>NA</div>
-            <div class="metric-label">Original :</div><div>7</div><div>3</div><div>1</div>
-            <div class="metric-label">Currently :</div><div>8</div><div>2</div><div>1</div>
+                <div class="metric-label">Currently :</div>
+                <div>{{ $safeOriginal['yes'] }}</div>
+                <div>{{ $safeOriginal['no'] }}</div>
+                <div>{{ $safeOriginal['na'] }}</div>
+            </div>
         </div>
     </div>
-</div> --}}
 
-<!-- WELL LED -->
-{{-- <div class="col-md-4">
-    <div class="metric-box">
-        <div class="metric-header">
-            <div class="metric-title">Well Led</div>
-            <div class="dot-yellow"></div>
-        </div>
-        <span class="metric-badge bad-yellow">Requires Improvement</span>
 
-        <div class="metric-grid">
-            <div></div><div>Yes</div><div>No</div><div>NA</div>
-            <div class="metric-label">Original :</div><div>17</div><div>4</div><div>1</div>
-            <div class="metric-label">Currently :</div><div>17</div><div>4</div><div>1</div>
+    <div class="col-md-4">
+        <div class="metric-box">
+            <div class="metric-header">
+                <div class="metric-title">Effective</div>
+                <div class="dot-yellow"></div>
+            </div>
+
+            <div class="metric-grid">
+                <div></div><div>Yes</div><div>No</div><div>NA</div>
+
+                <div class="metric-label">Original :</div>
+                <div>{{ $effectiveOriginal['yes'] }}</div>
+                <div>{{ $effectiveOriginal['no'] }}</div>
+                <div>{{ $effectiveOriginal['na'] }}</div>
+
+                <div class="metric-label">Currently :</div>
+                <div>{{ $effectiveOriginal['yes'] }}</div>
+                <div>{{ $effectiveOriginal['no'] }}</div>
+                <div>{{ $effectiveOriginal['na'] }}</div>
+            </div>
         </div>
     </div>
-</div> --}}
+
+    <div class="col-md-4">
+        <div class="metric-box">
+            <div class="metric-header">
+                <div class="metric-title">Well Led</div>
+                <div class="dot-blue"></div>
+            </div>
+
+            <div class="metric-grid">
+                <div></div><div>Yes</div><div>No</div><div>NA</div>
+
+                <div class="metric-label">Original :</div>
+                <div>{{ $wellledOriginal['yes'] }}</div>
+                <div>{{ $wellledOriginal['no'] }}</div>
+                <div>{{ $wellledOriginal['na'] }}</div>
+
+                <div class="metric-label">Currently :</div>
+                <div>{{ $wellledOriginal['yes'] }}</div>
+                <div>{{ $wellledOriginal['no'] }}</div>
+                <div>{{ $wellledOriginal['na'] }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="metric-box">
+            <div class="metric-header">
+                <div class="metric-title">Responsive</div>
+                <div class="dot-purple"></div>
+            </div>
+
+            <div class="metric-grid">
+                <div></div><div>Yes</div><div>No</div><div>NA</div>
+
+                <div class="metric-label">Original :</div>
+                <div>{{ $responsiveOriginal['yes'] }}</div>
+                <div>{{ $responsiveOriginal['no'] }}</div>
+                <div>{{ $responsiveOriginal['na'] }}</div>
+
+                <div class="metric-label">Currently :</div>
+                <div>{{ $responsiveOriginal['yes'] }}</div>
+                <div>{{ $responsiveOriginal['no'] }}</div>
+                <div>{{ $responsiveOriginal['na'] }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="metric-box">
+            <div class="metric-header">
+                <div class="metric-title">Caring</div>
+                <div class="dot-orange"></div>
+            </div>
+
+            <div class="metric-grid">
+                <div></div><div>Yes</div><div>No</div><div>NA</div>
+
+                <div class="metric-label">Original :</div>
+                <div>{{ $caringOriginal['yes'] }}</div>
+                <div>{{ $caringOriginal['no'] }}</div>
+                <div>{{ $caringOriginal['na'] }}</div>
+
+                <div class="metric-label">Currently :</div>
+                <div>{{ $caringOriginal['yes'] }}</div>
+                <div>{{ $caringOriginal['no'] }}</div>
+                <div>{{ $caringOriginal['na'] }}</div>
+            </div>
+        </div>
+    </div>
 
 </div>
 

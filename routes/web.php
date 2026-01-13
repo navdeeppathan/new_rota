@@ -190,5 +190,11 @@ Route::get('cqc-vault/all-tasks', [TaskManagementController::class, 'index2'])->
 
 Route::get('cqc-vault/tasks', [TaskManagementController::class, 'index'])->name('tasks.index');
 Route::post('/tasks', [TaskManagementController::class, 'store'])->name('tasks.store');
-Route::post('/tasks/update/{id}', [TaskManagementController::class, 'update'])->name('tasks.update');
+
+Route::get('cqc-vault/tasks/{id}/edit', [TaskManagementController::class, 'edit'])->name('tasks.edit');
+Route::post('cqc-vault/tasks/{id}/update', [TaskManagementController::class, 'update'])->name('tasks.update');
+
 Route::get('/tasks/delete/{id}', [TaskManagementController::class, 'destroy'])->name('tasks.delete');
+
+Route::post('/cqc-vault/tasks/{id}/progress',
+    [TaskManagementController::class,'updateProgress']);
