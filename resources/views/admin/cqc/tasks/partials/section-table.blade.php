@@ -26,8 +26,33 @@
                     </td>
 
                     <td>
-                        {{ $task->progress }}
-                    </td>
+    @if($task->progress == 'completed')
+        <span class="status-pill status-completed">
+            <i class="bi bi-check-circle-fill"></i> Completed
+        </span>
+
+    @elseif($task->progress == 'not completed')
+        <span class="status-pill status-not">
+            <i class="bi bi-x-circle"></i> Not Completed
+        </span>
+
+    @elseif($task->progress == 'progress')
+        <span class="status-pill status-progress">
+            <i class="bi bi-clock-fill"></i> In Progress
+        </span>
+
+    @elseif($task->progress == 'note')
+        <span class="status-pill status-note">
+            <i class="bi bi-journal-text"></i> Note
+        </span>
+
+    @elseif($task->progress == 'location')
+        <span class="status-pill status-location">
+            <i class="bi bi-geo-alt-fill"></i> Location
+        </span>
+    @endif
+</td>
+
 
                     <td>
                         {{ $task->progress_desc }}
@@ -95,6 +120,40 @@
 </div>
 </div>
 
+
+<style>
+    .status-pill {
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:4px 10px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:600;
+}
+
+.status-completed {
+    background:#dcfce7;
+    color:#166534;
+}
+.status-not {
+    background:#f3f4f6;
+    color:#374151;
+}
+.status-progress {
+    background:#fef3c7;
+    color:#92400e;
+}
+.status-note {
+    background:#dbeafe;
+    color:#1e40af;
+}
+.status-location {
+    background:#ede9fe;
+    color:#5b21b6;
+}
+
+</style>
 <script>
 function openProgressModal(id, type, desc = '') {
     document.getElementById('modal_task_id').value = id;
