@@ -370,7 +370,7 @@
 
 
 
-<div class="score-bar mb-4">
+{{-- <div class="score-bar mb-4">
 
     <div class="score-filter">
         <select>
@@ -380,7 +380,7 @@
 
     <div>
         Overall Score:
-        {{-- <span class="score-badge">80%</span> --}}
+       
     </div>
 
     <div class="score-options">
@@ -388,7 +388,7 @@
         <label class="ms-3"><input type="radio"> Show recent survey only</label>
     </div>
 
-</div>
+</div> --}}
 
 
 
