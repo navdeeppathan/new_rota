@@ -62,7 +62,7 @@ class CqcVaultController extends Controller
     {
         $request->validate([
             'title' => 'required',
-            'file'  => 'required|file|max:10240'
+            'file'  => 'required|file'
         ]);
 
         $file = $request->file('file');
