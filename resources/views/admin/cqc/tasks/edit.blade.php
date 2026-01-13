@@ -44,8 +44,7 @@
                         <option value="completed" {{ $task->progress=='completed'?'selected':'' }}>Completed</option>
                         <option value="not completed" {{ $task->progress=='not completed'?'selected':'' }}>Not Completed</option>
                         <option value="progress" {{ $task->progress=='progress'?'selected':'' }}>In Progress</option>
-                        <option value="note" {{ $task->progress=='note'?'selected':'' }}>Note</option>
-                        <option value="location" {{ $task->progress=='location'?'selected':'' }}>Location</option>
+                        
                     </select>
                 </div>
 
