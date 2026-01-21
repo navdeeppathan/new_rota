@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\ComplianceController;
 use App\Http\Controllers\Admin\CqcVaultController;
-use App\Http\Controllers\Admin\TaskManagementController;
-use Illuminate\Support\Facades\Route;
+    use App\Http\Controllers\Admin\TaskManagementController;
+    use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\PageController;
     use App\Http\Controllers\ScheduleController;
     use App\Http\Controllers\TaskScheduleController;
@@ -14,12 +15,12 @@ use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\BroadcastController;
     use App\Http\Controllers\ShiftDefinitionController;
     use App\Http\Controllers\AdminChatController;
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\ChatController;
+    use App\Http\Controllers\Api\AuthController;
+    use App\Http\Controllers\ChatController;
     use App\Http\Controllers\TaskController;
     use App\Models\PrivacyPolicy;
     use App\Http\Controllers\Auth\CustomPasswordController;
-use Dompdf\FrameDecorator\Page;
+    use Dompdf\FrameDecorator\Page;
 
     Route::get('forgot-password', [CustomPasswordController::class, 'showForgotForm'])->name('forgot.password');
     Route::post('forgot-password', [CustomPasswordController::class, 'sendResetLink'])->name('forgot.password.send');
@@ -40,7 +41,7 @@ use Dompdf\FrameDecorator\Page;
     });
     
     
-Route::prefix('admin/chat')->middleware(['isLoggedIn'])->group(function () {
+    Route::prefix('admin/chat')->middleware(['isLoggedIn'])->group(function () {
             Route::get('/', [AdminChatController::class, 'getConversations'])->name('admin.chat');
             Route::get('/users', [AdminChatController::class, 'getUsersList'])->name('admin.chat.users');
             Route::get('/messages', [AdminChatController::class, 'fetchMessages'])->name('admin.chat.messages');
@@ -66,9 +67,6 @@ Route::prefix('admin/chat')->middleware(['isLoggedIn'])->group(function () {
         Route::resource('broadcasts', BroadcastController::class);
     });
 
-   
-    
-    
     Route::prefix('leave-requests')->middleware('isLoggedIn')->group(function () {
         Route::get('/', [LeaveRequestController::class, 'index'])->name('leave-requests.index');
         Route::post('/leave/update-status', [LeaveRequestController::class, 'updateStatus'])->name('leave-requests.updateStatus');
@@ -82,7 +80,7 @@ Route::prefix('admin/chat')->middleware(['isLoggedIn'])->group(function () {
         Route::post('/save-shift', [PersonShiftController::class, 'store']);  
     });
     
-     Route::get('/reports/shifts', [PersonShiftController::class, 'report'])->name('reports.shifts');
+    Route::get('/reports/shifts', [PersonShiftController::class, 'report'])->name('reports.shifts');
     Route::get('/reports/shifts/export-excel', [PersonShiftController::class, 'exportExcel'])->name('reports.shifts.excel');
     Route::get('/reports/shifts/export-pdf', [PersonShiftController::class, 'exportPdf'])->name('reports.shifts.pdf');
 
@@ -97,8 +95,6 @@ Route::prefix('admin/chat')->middleware(['isLoggedIn'])->group(function () {
     Route::post('/superadminlogin/check', [PageController::class, 'superadminloginCheck'])->name('superadmin.login.check');
     
    
-
-    
     Route::middleware('isLoggedIn')->group(function () {
         Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard');
         Route::get('/users', [PageController::class, 'users'])->name('users');
@@ -160,6 +156,12 @@ Route::get('admin/dashboard', [CqcVaultController::class,'dashboard']);
 Route::get('admin/checklist-frequency', [CqcVaultController::class,'checklistfrequency']);
 Route::get('admin/checklist-cqc', [CqcVaultController::class,'checklist']);
 
+    Route::get('admin/compliance', [ComplianceController::class, 'index']);
+
+    Route::get('admin/compliance/checklist', [ComplianceController::class, 'getChecklist']);
+
+    Route::post('admin/compliance/update-check', [ComplianceController::class, 'updateCheck']);
+
 // Audit logs
 Route::get('cqc-vault/audit-logs', [CqcVaultController::class,'auditLogs']);
 
@@ -203,11 +205,7 @@ Route::post('/cqc-vault/tasks/{id}/progress',
 Route::middleware(['isLoggedIn'])->prefix('superadmin')->name('superadmin.')->group(function () {
 
     /* ===================== Dashboard ===================== */
-    Route::get('/', function () {
-    //   return redirect()->route('superadmin.projects.index');
-    return view('superadmin.dashboard');
-
-    })->name('dashboard');
+    Route::get('/', [PageController::class, 'index'])->name('dashboard');
 
 
     Route::get('/users', [PageController::class, 'index'])->name('users.index');

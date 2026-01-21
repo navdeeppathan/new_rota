@@ -17,75 +17,59 @@ class PageController extends Controller
         //     return redirect()->route('dashboard');
         // }
 
-         if (session()->has('login_success')) {
-                return view('admin.auth.login');
-            }
+        //  if (session()->has('login_success')) {
+        //         return view('admin.auth.login');
+        //     }
     
         return view('admin.auth.login');
     }
 
     public function loginCheck(Request $request)
-    {
-        try {
-           
-            // Validate the request
-            $request->validate([
-                'email'    => 'required',
-                'password' => 'required',
-            ]);
+{
+    // Validate OUTSIDE try-catch
+    $validated = $request->validate([
+        'email'    => 'required',
+        'password' => 'required',
+    ]);
 
-            // Attempt to find the user
-            $user = User::where('email', $request->email)->first();
 
-            if (!$user || !Hash::check($request->password, $user->password)) {
-                return redirect()->back()->with('error', 'Invalid credentials');
-            }
-    
-            // Allow only Admin (role_id == 1)
-            if ($user->role_id != 1 && $user->role_id != 0) {
-                return redirect()->back()->with('error', 'Access denied. Only Admins can log in.');
-            }
-    
-            // Store session data
-            session([
-                'user' => [
-                    'id'    => $user->id,
-                    'name'  => $user->name,
-                    'email' => $user->email,
-                    'role'  =>$user->role_id
-                ]
-            ]);
-    
-     
-            $admin = User::where('role_id', 1)->first();
-            
-            // if ($admin) {
-            //     Notification::create([
-            //         'alert_type_id'    => 2, // e.g. user_related
-            //         'message'          => "User has logged in.",
-            //         'show_to_admin'    => 1,
-            //         'admin_id'         => $admin->id,
-            //         'user_id'          => $user->id,
-            //     ]);
-            // }
-    
-            // Return success response
-            // return redirect()->route('dashboard')->with('success', 'Login successful!');
-            return redirect()->route('login')->with('login_success', true);
-    
-            
-        } catch (\Exception $e) {
-            Log::error('Login error: ' . $e->getMessage());
-    
-            // return response()->json([
-            //     'success' => false,
-            //     'message' => 'Something went wrong. Please try again.',
-            //     'data'    => null,
-            // ], 500);
-           
-            return redirect()->back()->with('login_error', 'Something went wrong. Please try again.');
+    try {
+
+        // Debug input
+        // dd($validated);
+
+        $user = User::where('email', $validated['email'])->first();
+
+        // Debug user
+        // dd($user);
+
+        if (!$user || !Hash::check($validated['password'], $user->password)) {
+            return back()->with('error', 'Invalid email or password');
         }
+
+        if (!in_array($user->role_id, [0, 1])) {
+            return back()->with('error', 'Access denied');
+        }
+
+        session([
+            'user' => [
+                'id'    => $user->id,
+                'name'  => $user->name,
+                'email' => $user->email,
+                'role'  => $user->role_id,
+            ]
+        ]);
+
+        return redirect()->route('login')->with('login_success', true);
+
+    } catch (\Exception $e) {
+        // dd($e->getMessage());
+        Log::error('Login error: '.$e->getMessage());
+
+        return back()->with('login_error', 'Something went wrong');
     }
+}
+
 
      public function superadminlogin()
     {
@@ -291,6 +275,11 @@ class PageController extends Controller
                 'name'     => 'required|string',
                 'email'    => 'required|email|unique:users,email',
                 'password' => 'required|string',
+                'registeration_no'=>'required',
+                
+                'website_url'=>'required',
+                'phone_number'=>'required',
+                'address'=>'required',
             ]);
 
             // Create user
@@ -299,7 +288,13 @@ class PageController extends Controller
                 'email'    => $request->email,
                 'password' =>  Hash::make($request->password),
                 'role_id'  => 1,
-                'parent_id' => $user['id']
+                'parent_id' => $user['id'],
+                'registeration_no'=>$request->registeration_no,
+                     
+                'website_url'=>$request->website_url,
+                'phone_number'=>$request->phone_number,
+                'address'=>$request->address,
+
                  // Plain password (no hash)
                 // OR use Hash::make() if you decide later
             ]);

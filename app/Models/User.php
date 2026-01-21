@@ -24,7 +24,10 @@ class User extends Authenticatable
         'gender',
         'team_leader_id',
         'category',
-        'parent_id'
+        'parent_id',
+        'registeration_no',
+        'manager_name',
+        'website_url'
     ];
 
     protected $hidden = [

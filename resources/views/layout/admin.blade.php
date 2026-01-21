@@ -49,7 +49,7 @@
     <a href="{{ url('admin/checklist-frequency') }}">
         <i class="bi bi-calendar-check me-2"></i> Checklist Frequency
     </a>
-    <a href="{{ url('admin/checklist-cqc') }}">
+    <a href="{{ url('admin/compliance') }}">
         <i class="bi bi-list-check me-2"></i> Checklist CQC
     </a>
      <a href="{{ url('cqc-vault/tasks') }}">
