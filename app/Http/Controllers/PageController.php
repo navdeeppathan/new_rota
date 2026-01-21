@@ -27,15 +27,16 @@ class PageController extends Controller
     public function loginCheck(Request $request)
     {
         try {
+           
             // Validate the request
             $request->validate([
-                'email'    => 'required|email',
+                'email'    => 'required',
                 'password' => 'required',
             ]);
-    
+
             // Attempt to find the user
             $user = User::where('email', $request->email)->first();
-    
+
             if (!$user || !Hash::check($request->password, $user->password)) {
                 return redirect()->back()->with('error', 'Invalid credentials');
             }
@@ -68,7 +69,6 @@ class PageController extends Controller
             //     ]);
             // }
     
-    
             // Return success response
             // return redirect()->route('dashboard')->with('success', 'Login successful!');
             return redirect()->route('login')->with('login_success', true);
@@ -82,11 +82,77 @@ class PageController extends Controller
             //     'message' => 'Something went wrong. Please try again.',
             //     'data'    => null,
             // ], 500);
+           
             return redirect()->back()->with('login_error', 'Something went wrong. Please try again.');
         }
     }
 
+     public function superadminlogin()
+    {
+        return view('superadmin.auth.login');
+    }
 
+
+    public function superadminloginCheck(Request $request)
+    {
+        try {
+           
+            // Validate the request
+            $request->validate([
+                'email'    => 'required',
+                'password' => 'required',
+            ]);
+
+           
+            // Attempt to find the user
+            $user = User::where('email', $request->email)->first();
+ 
+            
+            // dump($user);
+
+           if (!$user || $request->password !== $user->password) {
+                return redirect()->back()->with('error', 'Invalid credentials');
+            }
+    
+            // Allow only Admin (role_id == 1)
+            if ($user->role_id != 11) {
+                return redirect()->back()->with('error', 'Access denied. Only SuperAdmin can log in.');
+            }
+    
+            // Store session data
+            session([
+                'user' => [
+                    'id'    => $user->id,
+                    'name'  => $user->name,
+                    'email' => $user->email,
+                    'role'  =>$user->role_id
+                ]
+            ]);
+    
+     
+            $admin = User::where('role_id', 1)->first();
+            
+            // if ($admin) {
+            //     Notification::create([
+            //         'alert_type_id'    => 2, // e.g. user_related
+            //         'message'          => "User has logged in.",
+            //         'show_to_admin'    => 1,
+            //         'admin_id'         => $admin->id,
+            //         'user_id'          => $user->id,
+            //     ]);
+            // }
+    
+            // Return success response
+            // return redirect()->route('dashboard')->with('success', 'Login successful!');
+            return redirect()->route('superadmin.dashboard')->with('login_success', true);
+    
+            
+        } catch (\Exception $e) {
+            Log::error('Login error: ' . $e->getMessage());
+            // dd($e->getMessage());
+            return redirect()->back()->with('login_error', 'Something went wrong. Please try again.');
+        }
+    }
 
     public function logout()
     {
@@ -124,6 +190,8 @@ class PageController extends Controller
     
         return view('admin.users.index', compact('users'));
     }
+
+    
 
     public function createUser()
     {
@@ -197,6 +265,55 @@ class PageController extends Controller
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
+
+    
+    public function index()
+    {
+       $user = session('user');
+       $users = User::where('parent_id', $user['id'])->latest()->get();
+       return view('superadmin.user.index', compact('users'));
+    }
+
+    public function storeSuperAdminCreate()
+    {
+        return view('superadmin.user.create');
+    }
+
+
+
+    public function storeSuperAdminUser(Request $request)
+    {
+        try {
+            $user = session('user');
+
+            // Validate only required fields
+            $request->validate([
+                'name'     => 'required|string',
+                'email'    => 'required|email|unique:users,email',
+                'password' => 'required|string',
+            ]);
+
+            // Create user
+            User::create([
+                'name'     => $request->name,
+                'email'    => $request->email,
+                'password' =>  Hash::make($request->password),
+                'role_id'  => 1,
+                'parent_id' => $user['id']
+                 // Plain password (no hash)
+                // OR use Hash::make() if you decide later
+            ]);
+
+            return redirect()->back()->with('success', 'User created successfully');
+
+        } catch (\Exception $e) {
+            Log::error('User creation error: ' . $e->getMessage());
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+
+
     
     
         // private function sendNotifications($user)

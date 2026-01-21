@@ -19,9 +19,8 @@ use App\Http\Controllers\ChatController;
     use App\Http\Controllers\TaskController;
     use App\Models\PrivacyPolicy;
     use App\Http\Controllers\Auth\CustomPasswordController;
-    
-    
-    
+use Dompdf\FrameDecorator\Page;
+
     Route::get('forgot-password', [CustomPasswordController::class, 'showForgotForm'])->name('forgot.password');
     Route::post('forgot-password', [CustomPasswordController::class, 'sendResetLink'])->name('forgot.password.send');
 
@@ -80,9 +79,7 @@ Route::prefix('admin/chat')->middleware(['isLoggedIn'])->group(function () {
     Route::middleware('isLoggedIn')->group(function () {
        Route::get('/shifts/create', [PersonShiftController::class, 'create'])->name('shifts.create');
         Route::post('/shifts/store', [PersonShiftController::class, 'store'])->name('shifts.store');
-        Route::post('/save-shift', [PersonShiftController::class, 'store']);
-        
-       
+        Route::post('/save-shift', [PersonShiftController::class, 'store']);  
     });
     
      Route::get('/reports/shifts', [PersonShiftController::class, 'report'])->name('reports.shifts');
@@ -95,6 +92,9 @@ Route::prefix('admin/chat')->middleware(['isLoggedIn'])->group(function () {
     Route::get('/login', [PageController::class, 'login'])->name('login');
     Route::post('/login/check', [PageController::class, 'loginCheck'])->name('login.check');
     Route::post('/logout', [PageController::class, 'logout'])->name('logout');
+    
+    Route::get('/superadmin/login', [PageController::class, 'superadminlogin'])->name('superadmin.login');
+    Route::post('/superadminlogin/check', [PageController::class, 'superadminloginCheck'])->name('superadmin.login.check');
     
    
 
@@ -198,3 +198,19 @@ Route::get('/tasks/delete/{id}', [TaskManagementController::class, 'destroy'])->
 
 Route::post('/cqc-vault/tasks/{id}/progress',
     [TaskManagementController::class,'updateProgress']);
+
+
+Route::middleware(['isLoggedIn'])->prefix('superadmin')->name('superadmin.')->group(function () {
+
+    /* ===================== Dashboard ===================== */
+    Route::get('/', function () {
+    //   return redirect()->route('superadmin.projects.index');
+    return view('superadmin.dashboard');
+
+    })->name('dashboard');
+
+
+    Route::get('/users', [PageController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [PageController::class, 'storeSuperAdminCreate'])->name('users.create');
+    Route::post('/users/store', [PageController::class, 'storeSuperAdminUser'])->name('users.store');
+});

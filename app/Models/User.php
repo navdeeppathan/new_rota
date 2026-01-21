@@ -23,7 +23,8 @@ class User extends Authenticatable
         'address',
         'gender',
         'team_leader_id',
-        'category'
+        'category',
+        'parent_id'
     ];
 
     protected $hidden = [
