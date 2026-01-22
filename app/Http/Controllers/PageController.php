@@ -63,7 +63,7 @@ class PageController extends Controller
         return redirect()->route('login')->with('login_success', true);
 
     } catch (\Exception $e) {
-        // dd($e->getMessage());
+        dd($e->getMessage());
         Log::error('Login error: '.$e->getMessage());
 
         return back()->with('login_error', 'Something went wrong');

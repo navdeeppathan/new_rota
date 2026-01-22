@@ -53,13 +53,11 @@ class ComplianceController extends Controller
 public function updateCheck(Request $request)
 {
     $request->validate([
-        'c_tasks_id'   => 'required|exists:compliance_tasks,id',
-        'is_checked'=> 'required|boolean',
-        'percent'   => 'nullable|integer|min:0|max:100',
-        'frequency' => 'nullable|in:Daily,Weekly,Monthly'
+        'c_tasks_id' => 'required|exists:compliance_tasks,id',
+        'is_checked' => 'required|boolean',
+        'percent'    => 'nullable|numeric|min:0|max:100',
+        'frequency'  => 'nullable|in:Daily,Weekly,Monthly'
     ]);
-
-    
 
     if ($request->is_checked) {
 
@@ -70,24 +68,31 @@ public function updateCheck(Request $request)
                 'percent'    => $request->percent,
                 'frequency'  => $request->frequency,
                 'checked_at' => now(),
-               'checked_by' => session('user.name') ?? 'System'
-
+                'checked_by' => session('user.name') ?? 'System'
             ]
         );
 
     } else {
-
-        ComplianceCheck::where('c_tasks_id', $request->task_id)->delete();
+        ComplianceCheck::where('c_tasks_id', $request->c_tasks_id)->delete();
     }
 
-    // 🔥 SCORE = SUM OF ALL PERCENTAGES
-    $score = ComplianceCheck::sum('percent');
+    // ✅ CORRECT WEIGHTED SCORE
+    $totalTasks   = ComplianceTask::where('is_active', 1)->count();
+    $taskWeight   = 100 / $totalTasks;
+
+    $score = 0;
+    $checks = ComplianceCheck::get();
+
+    foreach ($checks as $check) {
+        $score += ($check->percent / 100) * $taskWeight;
+    }
 
     return response()->json([
         'status' => true,
-        'score'  => min($score, 100)
+        'score'  => round(min($score, 100), 2)
     ]);
 }
+
 
 
 

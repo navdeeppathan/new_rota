@@ -161,7 +161,7 @@ function init() {
             <input type="number"
                 id="percent-${t.id}"
                 value="${t.check?.percent ?? ''}"
-                placeholder="Enter percentage (0-100)">
+                placeholder="Enter progress (0-100%)">
 
             <select id="freq-${t.id}">
                 <option value="">Select Frequency</option>
@@ -265,13 +265,17 @@ function updateChart(score) {
 ====================== */
 function calculateInitialScore() {
     let total = 0;
+    const taskWeight = 100 / tasks.length;
+
     tasks.forEach(t => {
         if (t.check && t.check.percent) {
-            total += parseInt(t.check.percent);
+            total += (parseFloat(t.check.percent) / 100) * taskWeight;
         }
     });
-    return Math.min(total, 100);
+
+    return Math.min(total.toFixed(2), 100);
 }
+
 
 window.onload = init;
 </script>

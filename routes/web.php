@@ -156,6 +156,7 @@ Route::get('admin/dashboard', [CqcVaultController::class,'dashboard']);
 Route::get('admin/checklist-frequency', [CqcVaultController::class,'checklistfrequency']);
 Route::get('admin/checklist-cqc', [CqcVaultController::class,'checklist']);
 
+
     Route::get('admin/compliance', [ComplianceController::class, 'index']);
 
     Route::get('admin/compliance/checklist', [ComplianceController::class, 'getChecklist']);
@@ -186,6 +187,12 @@ Route::delete('cqc-vault/folder/{id}', [CqcVaultController::class,'dFolder']);
 Route::delete('cqc-vault/folder/{id}', [CqcVaultController::class,'deleteFolder']);
 Route::delete('cqc-vault/document/{id}', [CqcVaultController::class, 'deleteDocument']);
 
+
+Route::get('cqc/tasks/overview', [TaskManagementController::class, 'overview'])
+    ->name('cqc.tasks.overview');
+
+Route::get('cqc/tasks/export-pdf', [TaskManagementController::class, 'exportPdf'])
+    ->name('cqc.tasks.exportPdf');
 
 Route::get('/tasks/create', [TaskManagementController::class, 'create'])->name('tasks.create');
 Route::get('cqc-vault/all-tasks', [TaskManagementController::class, 'index2'])->name('tasks.index2');

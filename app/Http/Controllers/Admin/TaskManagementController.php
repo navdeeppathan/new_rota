@@ -8,6 +8,9 @@ use App\Models\TaskManagement;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
+
+use Barryvdh\DomPDF\Facade\Pdf;
+
 class TaskManagementController extends Controller
 {
     // public function index()
@@ -95,6 +98,64 @@ public function index(Request $request)
         'safeOriginal','effectiveOriginal','wellledOriginal',
         'responsiveOriginal','caringOriginal','range'
     ));
+}
+
+
+
+public function overview(Request $request)
+{
+    $range   = $request->get('range', 'daily');
+    $section = $request->get('section', 'Safe');
+
+    $query = TaskManagement::where('section', $section);
+
+    // 📅 Date filter
+    if ($range === 'daily') {
+        $query->whereDate('created_at', Carbon::today());
+    } elseif ($range === 'weekly') {
+        $query->whereBetween('created_at', [
+            Carbon::now()->startOfWeek(),
+            Carbon::now()->endOfWeek()
+        ]);
+    } elseif ($range === 'monthly') {
+        $query->whereMonth('created_at', Carbon::now()->month)
+              ->whereYear('created_at', Carbon::now()->year);
+    }
+
+    $tasks = $query->latest()->get();
+
+    return view('admin.cqc.tasks.overview', compact(
+        'tasks', 'range', 'section'
+    ));
+}
+
+
+public function exportPdf(Request $request)
+{
+    $range   = $request->range;
+    $section = $request->section;
+
+    $query = TaskManagement::where('section', $section);
+
+    if ($range === 'daily') {
+        $query->whereDate('created_at', Carbon::today());
+    } elseif ($range === 'weekly') {
+        $query->whereBetween('created_at', [
+            Carbon::now()->startOfWeek(),
+            Carbon::now()->endOfWeek()
+        ]);
+    } elseif ($range === 'monthly') {
+        $query->whereMonth('created_at', Carbon::now()->month)
+              ->whereYear('created_at', Carbon::now()->year);
+    }
+
+    $tasks = $query->latest()->get();
+
+    $pdf = Pdf::loadView('admin.cqc.tasks.export-pdf', compact(
+        'tasks', 'range', 'section'
+    ));
+
+    return $pdf->download($section.'-'.$range.'-tasks.pdf');
 }
 
 

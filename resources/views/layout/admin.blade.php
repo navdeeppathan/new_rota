@@ -59,6 +59,10 @@
         <i class="bi bi-journal-text me-2"></i>Audit CQC E-Vault
     </a>
 
+     <a href="{{ url('cqc/tasks/overview') }}">
+        <i class="bi bi-journal-text me-2"></i>Plan
+    </a>
+
     <!-- Push user info to bottom -->
     <div class="mt-auto border-top p-3">
 

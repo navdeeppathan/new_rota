@@ -1,398 +1,412 @@
-{{-- <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login</title>
-  <style>
-        /* Fix for SweetAlert2 button override */
-        .swal2-container button.swal2-confirm,
-        .swal2-container button.swal2-cancel {
-          all: unset;
-          padding: 10px 22px;
-          font-size: 14px;
-          background-color: #E85A72;
-          color: white;
-          border-radius: 6px;
-          border: none;
-          cursor: pointer;
-          text-align: center;
-          display: inline-block;
-        }
-    
-    </style>
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-     background: url('/02-Login.png');
-     no-repeat center center fixed;
-     background-size: cover;
-     background-color: #FFFFFF;
-     min-height: 100vh;
-     position: relative;
-    }
-
-    .login-wrapper {
-      max-width: 360px;
-       margin-left: 22rem;
-      margin: 0 auto;
-      padding: 80px 20px 40px;
-      top: 250px;
-    }
-       
-
-    h1 {
-      font-size: 36px;
-      font-weight: 700;
-      color: #535353;
-      margin-bottom: 2rem;
-    }
-
-    label {
-      font-size: 14px;
-      font-weight: 600;
-      color: #17215F;
-      display: block;
-      margin-bottom: 6px;
-    }
-
-    input[type="email"],
-    input[type="password"] {
-      width: 100%;
-      padding: 12px 16px;
-      border: none;
-      border-radius: 999px;
-      background-color: #305ED9;
-      color: #FFFFFF;
-      font-weight: 500;
-      font-size: 14px;
-      margin-bottom: 15px;
-      
-    }
-
-    input::placeholder {
-      color: #c9d8f9;
-    }
-
-    .forgot-password {
-      text-align: right;
-      /* margin-top: 10px; */
-      margin-bottom:2rem;
-    }
-
-    .forgot-password a {
-      font-size: 15px;
-      color: #17215F;
-      font-weight: 500;
-      text-decoration: underline;
-    }
-
-    .button-div{
-        margin-top: 2rem;
-        display: flex;
-        align-items: center;
-        justify-content: end
-    }
-    button {
-      width: 40%;
-      padding: 12px;
-      background-color: #E85A72;
-      color: #FFFFFF;
-      border: none;
-      border-radius: 999px;
-      font-size: 15px;
-      cursor: pointer;
-    }
-
-   
-
-    /* Decorative circles */
-    .circle {
-      position: absolute;
-      border-radius: 50%;
-      z-index: -1;
-    }
-
-    .circle-blue-top {
-      top: 0;
-      right: 0;
-      width: 180px;
-      height: 180px;
-      background-color: #b4e4fa;
-    }
-
-    .circle-blue-bottom {
-      bottom: -40px;
-      left: -40px;
-      width: 180px;
-      height: 180px;
-      background-color: #52a8f3;
-    }
-
-    @media (min-width: 768px) {
-      .login-wrapper {
-        padding-top: 360px;
-        margin-left: 22rem;
-        top: 250px;
-      }
-
-      h2 {
-        font-size: 24px;
-      }
-
-      button {
-        font-size: 16px;
-      }
-    }
-  </style>
-</head>
-<body>
-
-
-
-  <!-- Login Form -->
-  <div>
-    <div class="login-wrapper">
-    <h1>Login</h1>
-    <form method="POST" action="{{ route('login.check') }}">
-      @csrf
-
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" placeholder="Your registered email" required />
-
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" placeholder="••••••••" required />
-
-       <div class="forgot-password">
-        <a href="/forgot-password">Forgot password ?</a>
-      </div> 
-
-      <div class="button-div">
-        <button type="submit">Login</button>
-      </div>
-    </form>
-   
-   
-  <!-- ✅ Load SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
-    @if(session('error'))
-      <script>
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: '{{ session('error') }}',
-          confirmButtonColor: '#E85A72',
-        });
-      </script>
-    @endif
-    @if(session('success'))
-      <script>
-        Swal.fire({
-          icon: 'success',
-          title: 'Success!',
-          text: '{{ session('success') }}',
-          confirmButtonColor: '#49479D',
-        });
-    </script>
-    @endif
-
-@if(session('login_success'))
-<script>
-Swal.fire({
-    title: 'Login Successful!',
-    text: 'Where do you want to go?',
-    icon: 'success',
-    showCancelButton: true,
-    confirmButtonText: 'Go to CQC',
-    cancelButtonText: 'Go to ROTA',
-    confirmButtonColor: '#E85A72',
-    cancelButtonColor: '#49479D',
-
-    didOpen: () => {
-        const actions = Swal.getActions();
-        actions.style.display = 'flex';
-        actions.style.gap = '18px';   // 👈 gap between buttons
-        actions.style.justifyContent = 'center';
-
-        const confirmBtn = Swal.getConfirmButton();
-        const cancelBtn = Swal.getCancelButton();
-
-        confirmBtn.style.minWidth = '120px';
-        cancelBtn.style.minWidth = '120px';
-    }
-}).then((result) => {
-    if (result.isConfirmed) {
-        window.location.href = "/cqc-index";
-    } else {
-        window.location.href = "/dashboard";
-    }
-});
-</script>
-@endif
-
-
-
-  </div>
-  </div>
-</body>
-</html> --}}
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Login</title>
+<title>CQC360 Login</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- ===== FAVICON ===== -->
+<link rel="icon" href="/cqc360.png">
+<link rel="apple-touch-icon" href="/cqc360.png">
+
+<!-- ===== SOCIAL SHARE ===== -->
+<meta property="og:title" content="CQC360 Login">
+<meta property="og:description" content="Secure login to CQC360 dashboard">
+<meta property="og:image" content="{{ asset('cqc360.png') }}">
+<meta property="og:url" content="{{ url()->current() }}">
+<meta property="og:type" content="website">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{{ asset('cqc360.png') }}">
+
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
 <style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
 body{
-    background:#eaf1f8;
-    min-height:100vh;
+    height:100vh;
+    overflow:hidden;
+}
+
+/* ===== BACKGROUND ===== */
+.page-bg{
+    position:fixed;
+    inset:0;
+    background:url('/b1.png') center/cover no-repeat;
+    animation:bgZoom 30s ease-in-out infinite alternate;
+}
+
+@keyframes bgZoom{
+    from{transform:scale(1)}
+    to{transform:scale(1.08)}
+}
+
+.overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+}
+
+/* ===== MAIN LAYOUT ===== */
+.login-page{
+    position:relative;
+    z-index:2;
+    height:100vh;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-family:'Poppins', sans-serif;
-    padding:15px;
+    padding:40px;
 }
 
-.login-wrapper{
-    max-width:900px;
+.login-container{
     width:100%;
-    background:#fff;
-    border-radius:15px;
-    overflow:hidden;
-    box-shadow:0 15px 40px rgba(0,0,0,.1);
-}
-
-/* LEFT PANEL */
-.login-left{
-    background:linear-gradient(135deg,#2f80ed,#56ccf2);
+    max-width:1100px;
+    display:grid;
+    grid-template-columns:1fr 420px;
+    gap:40px;
     color:#fff;
-    padding:50px;
-    position:relative;
-    min-height:520px;
 }
 
-.login-left::after{
-    content:'';
-    position:absolute;
-    inset:0;
-    background-image:
-      radial-gradient(circle at 20% 30%,rgba(255,255,255,.2) 2px,transparent 3px),
-      radial-gradient(circle at 70% 60%,rgba(255,255,255,.2) 2px,transparent 3px),
-      radial-gradient(circle at 40% 80%,rgba(255,255,255,.2) 2px,transparent 3px);
-    background-size:150px 150px;
+/* ===== LEFT CONTENT ===== */
+.welcome{
+    display:flex;
+    flex-direction:column;
+    align-items: center;
+    justify-content:center;
 }
 
-.login-left h1{
-    font-size:34px;
+.welcome h1{
+    font-size:48px;
     font-weight:700;
+    line-height:1.2;
 }
 
-.login-left p{
-    opacity:.9;
+.welcome p{
     margin-top:20px;
-    line-height:1.7;
+    max-width:420px;
+    opacity:.9;
 }
 
-/* RIGHT PANEL */
-.login-right{
-    padding:60px 50px;
+.social{
+    margin-top:30px;
+    display:flex;
+    gap:15px;
 }
 
-.login-right h4{
-    font-weight:700;
-    color:#2f80ed;
+.social a{
+    width:36px;
+    height:36px;
+    border:1px solid rgba(255,255,255,.7);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    text-decoration:none;
+    transition:.3s;
 }
 
-.form-control{
-    height:48px;
-    border-radius:10px;
-    background:#f4f7fb;
-    border:none;
-}
-
-.form-control:focus{
-    box-shadow:none;
-    border:2px solid #2f80ed;
+.social a:hover{
     background:#fff;
+    color:#000;
 }
+
+/* ===== RIGHT FORM ===== */
+.form-box{
+    background:transparent;
+    padding:40px;
+    border-radius:8px;
+    box-shadow:0 20px 40px rgba(0,0,0,.5);
+    animation:fadeUp 1s ease forwards;
+}
+
+@keyframes fadeUp{
+    from{opacity:0; transform:translateY(40px)}
+    to{opacity:1; transform:translateY(0)}
+}
+
+.form-box h3{
+    margin-bottom:20px;
+    font-size:22px;
+}
+
+.input-group{
+    margin-bottom:15px;
+    position:relative;
+}
+
+.input-group input{
+    width:100%;
+    padding:12px 40px 12px 14px;
+    border:none;
+    outline:none;
+    border-radius:4px;
+    font-size:14px;
+}
+
+.toggle-password{
+    position:absolute;
+    right:12px;
+    top:50%;
+    transform:translateY(-50%);
+    cursor:pointer;
+    color:#333;
+}
+
+.remember{
+    display:flex;
+    align-items:center;
+    font-size:13px;
+    margin:10px 0 20px;
+}
+
+.remember input{margin-right:8px}
 
 .login-btn{
+    width:100%;
+    padding:12px;
     background:#2f80ed;
     border:none;
-    padding:14px;
-    width:100%;
     color:#fff;
-    border-radius:30px;
     font-weight:600;
-    margin-top:10px;
+    border-radius:4px;
+    cursor:pointer;
+    position:relative;
 }
 
 .login-btn:hover{
-    background:#1c6ed5;
+    background:#ff6320;
 }
 
-/* MOBILE FIXES */
-@media(max-width:768px){
-    .login-left{
-        min-height:auto;
-        padding:40px 25px;
+.spinner{
+    width:18px;
+    height:18px;
+    border:3px solid rgba(255,255,255,.4);
+    border-top:3px solid #fff;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+    display:none;
+    margin:0 auto;
+}
+
+@keyframes spin{
+    to{transform:rotate(360deg)}
+}
+
+.form-links{
+    margin-top:15px;
+    font-size:12px;
+}
+
+.form-links a{
+    color:#ddd;
+    text-decoration:none;
+}
+
+.form-links a:hover{text-decoration:underline}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+    .login-container{
+        grid-template-columns:1fr;
         text-align:center;
     }
-
-    .login-right{
-        padding:40px 25px;
+    .welcome{
+        display:none;
     }
-
-    .login-left h1{
-        font-size:26px;
+    .form-box{
+        background:transparent;
+        padding:0;
+        border-radius:8px;
+        box-shadow:none;
+        animation:fadeUp 1s ease forwards;
     }
 }
+
+/* ===== WELCOME ANIMATION ===== */
+.animate-welcome{
+    animation:welcomeFade 1s ease forwards;
+    opacity:0;
+}
+
+@keyframes welcomeFade{
+    to{opacity:1}
+}
+
+/* Heading animation */
+.welcome-title span{
+    display:inline-block;
+    opacity:0;
+    transform:translateY(30px);
+    animation:titleReveal .8s ease forwards;
+}
+
+.welcome-title span:nth-child(1){
+    animation-delay:.2s;
+}
+
+.welcome-title span:nth-child(3){
+    animation-delay:.4s;
+}
+
+@keyframes titleReveal{
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* Paragraph animation */
+.welcome-text{
+    opacity:0;
+    transform:translateY(20px);
+    animation:textFade .8s ease forwards;
+    animation-delay:.6s;
+    text-align: center;
+    color:#fff;
+}
+
+@keyframes textFade{
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* Social icons animation */
+.welcome-social .icon{
+    opacity:0;
+    transform:scale(.6);
+    animation:iconPop .5s ease forwards;
+}
+
+.delay-1{animation-delay:.9s}
+.delay-2{animation-delay:1.05s}
+.delay-3{animation-delay:1.2s}
+.delay-4{animation-delay:1.35s}
+
+@keyframes iconPop{
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+/* Hover polish */
+.welcome-social .icon:hover{
+    transform:scale(1.15);
+}
+
+.logo img{
+    width:60px;
+    height:60px;
+    object-fit:contain;
+    margin-bottom:20px;
+    animation:logoPop 1.2s ease forwards;
+    border-radius:50%;
+}
+@keyframes logoPop{
+    0%{transform:scale(.4);opacity:0}
+    60%{transform:scale(1.15)}
+    100%{transform:scale(1);opacity:1}
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="login-wrapper container-fluid">
-    <div class="row g-0">
+<div class="page-bg"></div>
+<div class="overlay"></div>
+
+<div class="login-page">
+    <div class="login-container">
 
         <!-- LEFT -->
-        <div class="col-lg-6 col-md-6 col-12 login-left d-flex flex-column justify-content-center text-center">
-            <small class="fw-bold">CQC360</small>
-            <h1 class="mt-4">WELCOME BACK</h1>
-            <p>Nice to see you again!  
-            Enter your credentials to access your account and continue your journey with us.</p>
+        <div class="welcome animate-welcome">
+
+            <h1 class="welcome-title">
+                <span>Welcome</span>
+                <span>Back</span>
+            </h1>
+
+            <p class="welcome-text">
+               Nice to see you again! <br> Enter your credentials to access your account and continue your journey with us.
+            </p>
+
+            <div class="social welcome-social">
+                <a href="#" class="icon delay-1"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="icon delay-2"><i class="bi bi-twitter"></i></a>
+                <a href="#" class="icon delay-3"><i class="bi bi-youtube"></i></a>
+                <a href="#" class="icon delay-4"><i class="bi bi-instagram"></i></a>
+            </div>
+
         </div>
 
-        <!-- RIGHT -->
-        <div class="col-lg-6 col-md-6 col-12 login-right d-flex flex-column justify-content-center">
-            <h4>Login Account</h4>
-            <p class="text-muted mb-4">Enter your email and password to login</p>
 
-            <form method="POST" action="{{ route('login.check') }}">
+        <!-- RIGHT -->
+        <div class="form-box">
+            <div class="logo">
+                <img src="/cqc360.png" alt="CQC360 Logo">
+            </div>
+            <h3>Sign in</h3>
+
+            <form method="POST" action="{{ route('login.check') }}" id="loginForm">
                 @csrf
-                <input type="email" name="email" class="form-control mb-3" placeholder="Email ID" required>
-                <input type="password" name="password" class="form-control mb-3" placeholder="Password" required>
-                <button class="login-btn">Login</button>
+
+                <div class="input-group">
+                    <input type="email" name="email" placeholder="Email Address" required>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                    <i class="bi bi-eye toggle-password" id="togglePassword"></i>
+                </div>
+
+                <div class="remember">
+                    <input type="checkbox"> Remember Me
+                </div>
+
+                <button class="login-btn" id="loginBtn">
+                    <span class="btn-text">Sign in now</span>
+                    <div class="spinner"></div>
+                </button>
             </form>
         </div>
 
     </div>
 </div>
+
+<script>
+/* password toggle */
+const toggle = document.getElementById('togglePassword');
+const pass = document.getElementById('password');
+
+toggle.onclick = ()=>{
+    pass.type = pass.type === 'password' ? 'text' : 'password';
+    toggle.classList.toggle('bi-eye');
+    toggle.classList.toggle('bi-eye-slash');
+};
+
+/* spinner */
+const form = document.getElementById('loginForm');
+const btn = document.getElementById('loginBtn');
+const spinner = btn.querySelector('.spinner');
+const text = btn.querySelector('.btn-text');
+
+form.addEventListener('submit',()=>{
+    text.style.display='none';
+    spinner.style.display='block';
+    btn.disabled=true;
+});
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -440,9 +454,5 @@ body{
     });
   </script>
 @endif
-
-</body>
-</html>
-
 </body>
 </html>
