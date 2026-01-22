@@ -161,7 +161,20 @@ body{
     </a>
 </div>
 
-<div class="sites-bar">Sites Overview</div>
+<div class="sites-bar">
+    <span>Sites Overview</span>
+
+    <form method="GET" action="{{ route('tasks.index') }}">
+        <select name="range" onchange="this.form.submit()"
+                style="border:none;border-radius:6px;padding:4px 8px;font-weight:600;">
+            <option value="daily" {{ request('range')=='daily' ? 'selected' : '' }}>Daily</option>
+            <option value="weekly" {{ request('range')=='weekly' ? 'selected' : '' }}>Weekly</option>
+            <option value="monthly" {{ request('range')=='monthly' ? 'selected' : '' }}>Monthly</option>
+        </select>
+    </form>
+</div>
+
+{{-- <div class="sites-bar">Sites Overview</div> --}}
 <div class="sites-card mb-4">
 <table class="sites-table">
     <thead>

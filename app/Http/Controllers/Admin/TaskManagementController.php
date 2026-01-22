@@ -5,42 +5,97 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\TaskManagement;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class TaskManagementController extends Controller
 {
-    public function index()
-    {
-        $allTasks = TaskManagement::all();
+    // public function index()
+    // {
+    //     $allTasks = TaskManagement::all();
 
-        $safe       = $allTasks->where('section','Safe')->count();
-        $effective  = $allTasks->where('section','Effective')->count();
-        $wellled    = $allTasks->where('section','Well-Led')->count();
-        $responsive = $allTasks->where('section','Responsive')->count();
-        $caring     = $allTasks->where('section','Caring')->count();
+    //     $safe       = $allTasks->where('section','Safe')->count();
+    //     $effective  = $allTasks->where('section','Effective')->count();
+    //     $wellled    = $allTasks->where('section','Well-Led')->count();
+    //     $responsive = $allTasks->where('section','Responsive')->count();
+    //     $caring     = $allTasks->where('section','Caring')->count();
 
-        $remaining = $allTasks->where('progress','!=','completed')->count();
+    //     $remaining = $allTasks->where('progress','!=','completed')->count();
 
-        function buildCqcStats($tasks) {
-            return [
-                'yes' => $tasks->where('progress','completed')->count(),
-                'no'  => $tasks->where('progress','not completed')->count(),
-                'na'  => $tasks->whereIn('progress',['progress','note','location'])->count(),
-            ];
-        }
+    //     function buildCqcStats($tasks) {
+    //         return [
+    //             'yes' => $tasks->where('progress','completed')->count(),
+    //             'no'  => $tasks->where('progress','not completed')->count(),
+    //             'na'  => $tasks->whereIn('progress',['progress','note','location'])->count(),
+    //         ];
+    //     }
 
-        $safeOriginal       = buildCqcStats($allTasks->where('section','Safe'));
-        $effectiveOriginal  = buildCqcStats($allTasks->where('section','Effective'));
-        $wellledOriginal    = buildCqcStats($allTasks->where('section','Well-Led'));
-        $responsiveOriginal = buildCqcStats($allTasks->where('section','Responsive'));
-        $caringOriginal     = buildCqcStats($allTasks->where('section','Caring'));
+    //     $safeOriginal       = buildCqcStats($allTasks->where('section','Safe'));
+    //     $effectiveOriginal  = buildCqcStats($allTasks->where('section','Effective'));
+    //     $wellledOriginal    = buildCqcStats($allTasks->where('section','Well-Led'));
+    //     $responsiveOriginal = buildCqcStats($allTasks->where('section','Responsive'));
+    //     $caringOriginal     = buildCqcStats($allTasks->where('section','Caring'));
 
-        return view('admin.cqc.tasks.dashboard', compact(
-            'safe','effective','wellled','responsive','caring','remaining',
-            'safeOriginal','effectiveOriginal','wellledOriginal','responsiveOriginal','caringOriginal'
-        ));
+    //     return view('admin.cqc.tasks.dashboard', compact(
+    //         'safe','effective','wellled','responsive','caring','remaining',
+    //         'safeOriginal','effectiveOriginal','wellledOriginal','responsiveOriginal','caringOriginal'
+    //     ));
+    // }
+
+
+public function index(Request $request)
+{
+    $range = $request->get('range', 'daily');
+
+    $query = TaskManagement::query();
+
+    // 📅 DATE FILTER
+    if ($range === 'daily') {
+        $query->whereDate('created_at', Carbon::today());
+    } elseif ($range === 'weekly') {
+        $query->whereBetween('created_at', [
+            Carbon::now()->startOfWeek(),
+            Carbon::now()->endOfWeek()
+        ]);
+    } elseif ($range === 'monthly') {
+        $query->whereMonth('created_at', Carbon::now()->month)
+              ->whereYear('created_at', Carbon::now()->year);
     }
 
+    // ONLY filtered tasks for Sites Overview
+    $filteredTasks = $query->get();
+
+    $safe       = $filteredTasks->where('section','Safe')->count();
+    $effective  = $filteredTasks->where('section','Effective')->count();
+    $wellled    = $filteredTasks->where('section','Well-Led')->count();
+    $responsive = $filteredTasks->where('section','Responsive')->count();
+    $caring     = $filteredTasks->where('section','Caring')->count();
+
+    $remaining  = $filteredTasks->where('progress','!=','completed')->count();
+
+    // 👇 ORIGINAL data (no filter) remains SAME
+    $allTasks = TaskManagement::all();
+
+    function buildCqcStats($tasks) {
+        return [
+            'yes' => $tasks->where('progress','completed')->count(),
+            'no'  => $tasks->where('progress','not completed')->count(),
+            'na'  => $tasks->whereIn('progress',['progress','note','location'])->count(),
+        ];
+    }
+
+    $safeOriginal       = buildCqcStats($allTasks->where('section','Safe'));
+    $effectiveOriginal  = buildCqcStats($allTasks->where('section','Effective'));
+    $wellledOriginal    = buildCqcStats($allTasks->where('section','Well-Led'));
+    $responsiveOriginal = buildCqcStats($allTasks->where('section','Responsive'));
+    $caringOriginal     = buildCqcStats($allTasks->where('section','Caring'));
+
+    return view('admin.cqc.tasks.dashboard', compact(
+        'safe','effective','wellled','responsive','caring','remaining',
+        'safeOriginal','effectiveOriginal','wellledOriginal',
+        'responsiveOriginal','caringOriginal','range'
+    ));
+}
 
 
 
